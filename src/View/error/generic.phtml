@@ -1,0 +1,31 @@
+<?php /** @var Lh\Mvc\PageView $this */ /** @var string $message */ /** @var string $type */ ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+	<title>System Error</title>
+	<style type="text/css">
+		.bold { font-weight: bold; }
+		.bigger { font-size: 1.5em; }
+		.big { font-size: 1.2em; }
+		.error { color: red; }
+	</style>
+</head>
+
+<body>
+	<div class="bold">
+		<span class="bigger error">Sorry but we encountered an error while processing your request.</span><br />
+		<span class="big">Please correct bellow error first before continuing.</span><br />
+		<span class="big">Error Type: <?php print $type; ?></span>
+	</div>
+
+	<div>
+		<br />
+		<span class="bold">Message :</span><br />
+		<div style="border: dotted 1px #000000; padding: 0 10px; overflow: auto;">
+			<pre><?php print($message); ?></pre>
+		</div>
+	</div>
+</body>
+
+</html>

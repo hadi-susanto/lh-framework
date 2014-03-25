@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+	<title>LH Framework API - Faster Web Application Development</title>
+	<parser>
+		<target>temp/php-doc-parser</target>
+		<markers>
+			<item>ToDo</item>
+		</markers>
+	</parser>
+	<transformer>
+		<target>public/api</target>
+	</transformer>
+	<files>
+		<directory>vendor</directory>
+		<ignore>password.php</ignore>
+		<igonore>vendor/Lh/Utilities/*</igonore>
+	</files>
+</phpdoc>
