@@ -24,7 +24,7 @@ class MySqlPdoQuery extends PdoQuery {
 	 * @param int       $code
 	 * @param Exception $previousException
 	 *
-	 * @return \Lh\Db\DbException
+	 * @return MySqlPdoException
 	 */
 	protected function createException($message, $code = 0, Exception $previousException = null) {
 		return new MySqlPdoException($message, $code, $previousException);

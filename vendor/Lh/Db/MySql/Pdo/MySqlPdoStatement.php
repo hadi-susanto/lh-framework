@@ -9,7 +9,6 @@
 namespace Lh\Db\MySql\Pdo;
 
 use Exception;
-use Lh\Db\Pdo\PdoQuery;
 use Lh\Db\Pdo\LhPdoStatement;
 
 /**
@@ -25,7 +24,7 @@ class MySqlPdoStatement extends LhPdoStatement {
 	 * @param int       $code
 	 * @param Exception $previousException
 	 *
-	 * @return \Lh\Db\DbException
+	 * @return MySqlPdoException
 	 */
 	protected function createException($message, $code = 0, Exception $previousException = null) {
 		return new MySqlPdoException($message, $code, $previousException);
@@ -37,7 +36,7 @@ class MySqlPdoStatement extends LhPdoStatement {
 	 * @param \PDOStatement $statement
 	 * @param int           $fetchMode
 	 *
-	 * @return PdoQuery
+	 * @return MySqlPdoQuery
 	 */
 	protected function createPdoQuery(\PDOStatement &$statement, &$fetchMode) {
 		return new MySqlPdoQuery($statement, $fetchMode);

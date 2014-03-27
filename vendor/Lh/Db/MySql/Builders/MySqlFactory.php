@@ -9,8 +9,6 @@
 namespace Lh\Db\MySql\Builders;
 
 use Lh\Db\Builders\IFactory;
-use Lh\Db\Builders\IInsert;
-use Lh\Db\Builders\IUpdate;
 use Lh\Db\IAdapter;
 
 /**
@@ -49,7 +47,7 @@ class MySqlFactory implements IFactory {
 	 *
 	 * @param string $tableName
 	 *
-	 * @return IInsert
+	 * @return MySqlInsert
 	 */
 	public function insert($tableName = null) {
 		return new MySqlInsert($tableName, $this->adapter);
