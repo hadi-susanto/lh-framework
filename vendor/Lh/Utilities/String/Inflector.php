@@ -6,7 +6,7 @@
  * @copyright 2014
  */
 
-namespace Lh\Utility\String;
+namespace Lh\Utilities\String;
 
 /**
  * Class Inflector

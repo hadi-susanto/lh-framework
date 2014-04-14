@@ -16,7 +16,7 @@ namespace Lh;
  * @package Lh
  */
 class Framework {
-	const VERSION = "0.9";
+	const VERSION = "0.9.1";
 	const VERSION_TYPE = "RC";
 
 	/**

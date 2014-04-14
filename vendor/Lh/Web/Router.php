@@ -43,7 +43,7 @@ class Router extends ServiceBase {
 	/** @var string Regex to determine parameter validity. ToDo: Parameter regex */
 	private $parameterRegex;
 	/** @var array Static routes for re-route any route data */
-	private $staticRoutes;
+	private $staticRoutes = array();
 	/** @var RouteData Processed route data based on URI and static routes */
 	private $routeData;
 
@@ -139,18 +139,116 @@ class Router extends ServiceBase {
 		$this->defaultMethod = isset($options["defaultMethod"]) ? strtolower($options["defaultMethod"]) : "index";
 		$this->controllerRegex = isset($options["controllerRegex"]) ? $options["controllerRegex"] : "[a-zA-Z][a-zA-Z0-9_-]*";
 		$this->parameterRegex = isset($options["parameterRegex"]) ? $options["parameterRegex"] : "[a-zA-Z0-9_-]*";
+		if (isset($options["staticRoutes"]) && is_array($options["staticRoutes"])) {
+			$this->processStaticRoutes($options["staticRoutes"]);
+		}
 
 		$this->controllerPath = Application::getInstance()->getControllerPath();
 	}
 
 	/**
+	 * Processing each routes from system config.
+	 *
+	 * This method will check and processing static route from system config. Any invalid static route will be ignored instead of throwing an error.
+	 * Static route array definition should contain:
+	 *  - 'pattern' => string
+	 *  - 'action'  => array('controller' => string|int, 'method' => string|int, 'params' => null|int[])
+	 *
+	 * @param array $staticRoutes
+	 */
+	private function processStaticRoutes($staticRoutes) {
+		foreach ($staticRoutes as $staticRoute) {
+			if (!isset($staticRoute["pattern"]) || empty($staticRoute["pattern"])) {
+				continue;
+			}
+			if (!isset($staticRoute["action"]) || !is_array($staticRoute["action"])) {
+				continue;
+			}
+
+			$pattern = &$staticRoute["pattern"];
+			if (strpos($pattern, '/') !== 0) {
+				$pattern = '/' . $pattern;
+			}
+			$pattern = str_replace('/', '\/', $pattern);
+
+			$action = &$staticRoute["action"];
+			if (!isset($action["controller"]) || empty($action["controller"])) {
+				continue;
+			}
+			if (!isset($action["method"]) || empty($action["method"])) {
+				$action["method"] = $this->defaultMethod;
+			}
+			if (!isset($action["params"]) || !is_array($action["params"])) {
+				$action["params"] = array();
+			}
+
+			$this->staticRoutes[] = $staticRoute;
+		}
+	}
+
+	/**
 	 * Determine controller, method, parameter(s) and named parameter(s) based on Uri
+	 *
+	 * Calculating static route from user config file. All static routes already checked for their validity. Each static route must have pattern, controller and
+	 * method key. This checking done by Router::processStaticRoutes() method
 	 *
 	 * @param Uri $uri
 	 *
 	 * @return RouteData
 	 */
 	public function calculateRoute(Uri $uri) {
+		// Processing static route data first !
+		foreach ($this->staticRoutes as $staticRoute) {
+			$pattern = $staticRoute["pattern"] ?: null;
+			$action = $staticRoute["action"] ?: null;
+
+			if ($pattern == null || $action == null) {
+				continue;
+			}
+
+			$matches = null;
+			if (preg_match("/^$pattern/i", $uri, $matches) !== 1) {
+				continue;
+			}
+
+			// Match(es) found!
+			$routeData = new RouteData($staticRoute);
+
+			// Set Controller based on route action.
+			if (is_numeric($action["controller"]) && isset($matches[$action["controller"]])) {
+				$routeData->setControllerSegment($matches[$action["controller"]]);
+			} else {
+				$routeData->setControllerSegment($action["controller"]);
+			}
+
+			// Set Method based on route action
+			if (is_numeric($action["method"]) && isset($matches[$action["method"]])) {
+				$routeData->setMethodSegment($matches[$action["method"]]);
+			} else {
+				$routeData->setMethodSegment($action["method"]);
+			}
+
+			// Set Parameter or Named Parameter based on route action
+			foreach ($action["params"] as $param) {
+				$param = (int)$param;
+				if ($param > 0 && isset($matches[$param])) {
+					$match = $matches[$param];
+					if (strpos($match, ":") !== false) {
+						list($key, $value) = explode(":", $match, 2);
+						// Prevent '/:param' added without any key. These case treated as same key and value pair
+						$routeData->addNamedParameter($key ?: $value, $value);
+					} else {
+						$routeData->addParameter($match);
+					}
+				} else {
+					$routeData->addParameter("");
+				}
+			}
+
+			return $routeData;
+		}
+
+		// No static route data have been hit.
 		$controllerFolder = $this->controllerPath;
 		$routeData = new RouteData();
 		$segments = $uri->getSegments();
@@ -205,7 +303,7 @@ class Router extends ServiceBase {
 
 			return $routeData;
 		} else {
-			$noRouteMatch = new RouteData($routeData);
+			$noRouteMatch = new RouteData();
 			$noRouteMatch->setControllerSegment("error");
 			$noRouteMatch->setMethodSegment("no-match");
 

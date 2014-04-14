@@ -129,6 +129,15 @@ class Uri {
 			$this->camelizedSegments[] = $temp;
 		}
 	}
+
+	/**
+	 * Return original URI string when this object directly printed.
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->getOriginalRequestUri();
+	}
 }
 
 // End of File: Uri.php 

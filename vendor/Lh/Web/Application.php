@@ -139,7 +139,7 @@ class Application extends ApplicationBase {
 	 *
 	 * Append script only affected PageView::url() and ControllerBase::url(). Append script should be activated if your web server don't support mod_rewrite
 	 *
-	 * @param $value
+	 * @param bool $value
 	 *
 	 * @see Lh\Mvc\PageView::url()
 	 * @see Lh\Mvc\ControllerBase::url()
@@ -163,7 +163,7 @@ class Application extends ApplicationBase {
 	/**
 	 * Set relative folder of our application from web server root folder
 	 *
-	 * @param $path
+	 * @param string $path
 	 */
 	private function setBasePath($path) {
 		$this->basePath = $path;
@@ -190,7 +190,7 @@ class Application extends ApplicationBase {
 	 * Application source folder are specialized folder containing your Controller, Model and View codes (we refer it as user code). We give
 	 * user ability to move this special folder to another location by specifying 'sourcePath' key in application config file
 	 *
-	 * @param $path
+	 * @param string $path
 	 */
 	private function setSourcePath($path) {
 		if (empty($path) || !is_dir($path)) {
@@ -206,7 +206,7 @@ class Application extends ApplicationBase {
 	 * Bootstrap class will provide user code to customize the way LH Framework executed. It can terminate it, changing user request, etc
 	 * Bootstrap will be hook into Application and Dispatcher sequence
 	 *
-	 * @param $config
+	 * @param array $config
 	 */
 	private function setBootstrapClass($config) {
 		if ($config == null) {
@@ -441,8 +441,12 @@ class Application extends ApplicationBase {
 
 			$dispatcher->dispatchError($message);
 		} else {
-			$routeData = $this->serviceLocator->getRouter()->calculateRoute($request->getUri());
-			$dispatcher->dispatch($routeData);
+			try {
+				$routeData = $this->serviceLocator->getRouter()->calculateRoute($request->getUri());
+				$dispatcher->dispatch($routeData);
+			} catch (\Exception $ex) {
+				$dispatcher->dispatchException($ex, "\\Lh\\Web\\Application::start()");
+			}
 		}
 
 		foreach (Dispatcher::getInstances() as $dispatcher) {

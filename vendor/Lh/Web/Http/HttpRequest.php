@@ -99,7 +99,7 @@ class HttpRequest {
 	}
 
 	/**
-	 * Get associtated Uri object
+	 * Get associated Uri object
 	 *
 	 * @return \Lh\Web\Uri
 	 */

@@ -35,18 +35,27 @@ class RouteData {
 	protected $parameters;
 	/** @var string[] Named parameter from URL segment(s) */
 	protected $namedParameters;
+	/** @var array Contain static route data from config file if current route come from static route */
+	protected $staticRouteData = null;
 
 	/**
 	 * Create RouteData instance
+	 *
+	 * This class will containing all required data for framework execution. Data such as controller, method, etc are automatically determined from Router class.
+	 * If this instance created from static route then matching static route data will be stored.
+	 *
+	 * @param null|array $staticRouteData
 	 */
-	public function __construct() {
+	public function __construct($staticRouteData = null) {
 		$this->namespaceSegments = array();
 		$this->controllerSegment = null;
 		$this->controllerClassName = null;
+		$this->namespaces = array();
 		$this->methodSegment = null;
 		$this->methodName = null;
 		$this->parameters = array();
 		$this->namedParameters = array();
+		$this->staticRouteData = $staticRouteData;
 	}
 
 	/**
@@ -221,6 +230,26 @@ class RouteData {
 	}
 
 	/**
+	 * Get static route data if any.
+	 *
+	 * Return matching static route data from application config file if current RouteData are  created from static route
+	 *
+	 * @return null|array
+	 */
+	public function getStaticRouteData() {
+		return $this->staticRouteData;
+	}
+
+	/**
+	 * Get whether current route data is come from static route or not
+	 *
+	 * @return bool
+	 */
+	public function isStaticRoute() {
+		return ($this->staticRouteData !== null);
+	}
+
+	/**
 	 * Checking RouteData validity
 	 *
 	 * A route data only valid when:
@@ -250,19 +279,58 @@ class RouteData {
 	/**
 	 * Return representation of current object in array format
 	 *
+	 * By default this method will only return keys which have been set before. Any elements which have default value will not returned if selective mode activated.
+	 * If you want to return all keys, please turn off selective mode
+	 *
+	 * @param bool $selective
+	 *
 	 * @return array
 	 */
-	public function toArray() {
-		return array(
-			"namespaceSegments" => $this->getNamespaceSegments(),
-			"controllerSegment" => $this->getControllerSegment(),
-			"methodSegment" => $this->getMethodSegment(),
-			"namespaces" => $this->getNamespaces(),
-			"controller" => $this->getControllerClassName(),
-			"method" => $this->getMethodName(),
-			"parameters" => $this->getParameters(),
-			"namedParameters" => $this->getNamedParameters()
-		);
+	public function toArray($selective = true) {
+		if ($selective) {
+			$buffer = array();
+			if (count($this->namespaceSegments) > 0) {
+				$buffer["namespaceSegments"] = $this->getNamespaceSegments();
+			}
+			if ($this->controllerSegment != null) {
+				$buffer["controllerSegment"] = $this->getControllerSegment();
+			}
+			if ($this->methodSegment != null) {
+				$buffer["methodSegment"] = $this->getMethodSegment();
+			}
+			if (count($this->namespaces) > 0) {
+				$buffer["namespaces"] = $this->getNamespaceSegments();
+			}
+			if ($this->controllerClassName != null) {
+				$buffer["controller"] = $this->getControllerClassName();
+			}
+			if ($this->methodName != null) {
+				$buffer["method"] = $this->getMethodName();
+			}
+			if (count($this->parameters) > 0) {
+				$buffer["parameters"] = $this->getParameters();
+			}
+			if (count($this->namedParameters) > 0) {
+				$buffer["namedParameters"] = $this->getNamedParameters();
+			}
+			if ($this->staticRouteData !== null) {
+				$buffer["staticRoute"] = $this->getStaticRouteData();
+			}
+
+			return $buffer;
+		} else {
+			return array(
+				"namespaceSegments" => $this->getNamespaceSegments(),
+				"controllerSegment" => $this->getControllerSegment(),
+				"methodSegment" => $this->getMethodSegment(),
+				"namespaces" => $this->getNamespaces(),
+				"controller" => $this->getControllerClassName(),
+				"method" => $this->getMethodName(),
+				"parameters" => $this->getParameters(),
+				"namedParameters" => $this->getNamedParameters(),
+				"staticRoute" => $this->getStaticRouteData()
+			);
+		}
 	}
 
 	/**
