@@ -184,6 +184,8 @@ class MsSqlPdoAdapter extends PdoAdapterBase {
 		if ($this->isTrustServerCertificate) {
 			$tokens[] = "TrustServerCertificate=1";
 		}
+
+		return "sqlsrv:" . implode(";", $tokens);
 	}
 
 	/**
