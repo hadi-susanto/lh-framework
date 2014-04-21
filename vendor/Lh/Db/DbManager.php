@@ -45,17 +45,11 @@ class DbManager extends ServiceBase {
 	private $commonDriverNames = array(
 		"mysql" => "Lh\\Db\\MySql\\MySqlAdapter",
 		"mysqli" => "Lh\\Db\\MySqli\\MySqliAdapter",
-		"postgre" => "Lh\\Db\\PostgreSql\\PostgreSqlAdapter",
-		"sqlite" => "Lh\\Db\\Sqlite\\SqliteAdapter",
 		"mssql" => "Lh\\Db\\MsSql\\MsSqlAdapter",
-		"oci8" => "Lh\\Db\\Oci8\\Oci8Adapter",
-		"sybase" => "Lh\\Db\\Sybase\\SybaseAdapter",
+		"sqlsrv" => "Lh\\Db\\MsSql\\MsSqlAdapter",
 		"pdo.mysql" => "Lh\\Db\\MySql\\Pdo\\MySqlPdoAdapter",
-		"pdo.postgre" => "Lh\\Db\\PostgreSql\\Pdo\\PostgreSqlPdoAdapter",
-		"pdo.sqlite" => "Lh\\Db\\Sqlite\\Pdo\\SqlitePdoAdapter",
 		"pdo.mssql" => "Lh\\Db\\MsSql\\Pdo\\MsSqlPdoAdapter",
-		"pdo.oci8" => "Lh\\Db\\Oci8\\Oci8PdoAdapter",
-		"pdo.sybase" => "Lh\\Db\\Sybase\\SybasePdoAdapter"
+		"pdo.sqlsrv" => "Lh\\Db\\MsSql\\Pdo\\MsSqlPdoAdapter"
 	);
 
 	/**
