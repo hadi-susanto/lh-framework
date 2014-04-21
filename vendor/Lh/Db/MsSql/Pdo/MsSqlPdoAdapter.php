@@ -150,7 +150,11 @@ class MsSqlPdoAdapter extends PdoAdapterBase {
 	 */
 	protected function generateDsn() {
 		$tokens = array();
-		$tokens[] = "Server=" . $this->server . "," . $this->port;
+		if ($this->port != 1433) {
+			$tokens[] = "Server=" . $this->server . "," . $this->port;
+		} else {
+			$tokens[] = "Server=" . $this->server;
+		}
 		if ($this->dbName != null) {
 			$tokens[] = "Database=" . $this->dbName;
 		}
