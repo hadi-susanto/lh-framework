@@ -320,7 +320,7 @@ abstract class PdoAdapterBase implements IPdoAdapter {
 			}
 
 			if ($result instanceof \PDOStatement) {
-				$this->previousStatement = $result;
+				$this->previousStatement = $this->createStatement($result);
 
 				return $this->createQuery($result, $fetchMode);
 			} else {
@@ -551,4 +551,4 @@ abstract class PdoAdapterBase implements IPdoAdapter {
 	}
 }
 
-// End of File: PdoAdapterBase.php 
+// End of File: PdoAdapterBase.php
