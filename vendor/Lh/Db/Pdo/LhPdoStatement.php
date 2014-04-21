@@ -175,24 +175,17 @@ abstract class LhPdoStatement implements IPdoStatement {
 	/**
 	 * Execute prepared query
 	 *
-	 * Execute prepared query with their parameters. Parameter passed using $parameters will override all parameter(s) from
-	 * bindValue(). Any class implements this should make sure that clearBinds() called if $parameters is not null.
-	 * IMPORTANT: since array() will be evaluated as null then checking must be use === operator instead of ==
+	 * Execute prepared query with their parameters. The parameter(s) should be bound using IStatement::bindValue() method before any execution. Perform binding
+	 * after IStatement execution could lead to un-expected error or exception.
 	 *
-	 * @param null|array $parameters
-	 * @param int        $fetchMode
+	 * @param int $fetchMode
+	 *
+	 * @see IStatement::bindValue()
 	 *
 	 * @throws \Lh\Db\DbException
 	 * @return IQuery
 	 */
-	public function execute($parameters = null, $fetchMode = IQuery::FETCH_ASSOC) {
-		if (is_array($parameters)) {
-			$this->clearBinds();
-			foreach ($parameters as $param => $value) {
-				$this->bindValue($param, $value);
-			}
-		}
-
+	public function execute($fetchMode = IQuery::FETCH_ASSOC) {
 		if (!$this->prepareParameters()) {
 			throw $this->createException("Failed to prepare / bind parameters into statement object.");
 		}

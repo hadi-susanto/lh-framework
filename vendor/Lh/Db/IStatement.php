@@ -58,7 +58,9 @@ interface IStatement {
 	/**
 	 * Bind a parameter into prepared statement for use before execution.
 	 *
-	 * IMPORTANT: Each driver may be behave a little differently while bound a value. This framework trying its best to provide similar result
+	 * IMPORTANT:
+	 *  - Each driver may be behave a little differently while bound a value. This framework trying its best to provide similar result.
+	 *  - Binding should be done before statement execution.
 	 *
 	 * @param string $name
 	 * @param mixed  $value
@@ -78,16 +80,16 @@ interface IStatement {
 	/**
 	 * Execute prepared query
 	 *
-	 * Execute prepared query with their parameters. Parameter passed using $parameters will override all parameter(s) from
-	 * bindValue(). Any class implements this should make sure that clearBinds() called if $parameters is not null.
-	 * IMPORTANT: since array() will be evaluated as null then checking must be use === operator instead of ==
+	 * Execute prepared query with their parameters. The parameter(s) should be bound using IStatement::bindValue() method before any execution. Perform binding
+	 * after IStatement execution could lead to un-expected error or exception.
 	 *
-	 * @param null|array $parameters
-	 * @param int        $fetchMode
+	 * @param int $fetchMode
+	 *
+	 * @see IStatement::bindValue()
 	 *
 	 * @return IQuery
 	 */
-	public function execute($parameters = null, $fetchMode = IQuery::FETCH_ASSOC);
+	public function execute($fetchMode = IQuery::FETCH_ASSOC);
 
 	/**
 	 * Close current statement and release their resources

@@ -160,23 +160,17 @@ class MySqliStatement implements IStatement {
 	/**
 	 * Execute prepared query
 	 *
-	 * Execute prepared query with their parameters. Parameter passed using $parameters will override all parameter(s) from
-	 * bindValue(). NOTE: If parameter passed using bindValue() then specify null instead array() for $parameters
+	 * Execute prepared query with their parameters. The parameter(s) should be bound using IStatement::bindValue() method before any execution. Perform binding
+	 * after IStatement execution could lead to un-expected error or exception.
 	 *
-	 * @param null|array $parameters
-	 * @param int        $fetchMode
+	 * @param int $fetchMode
+	 *
+	 * @see IStatement::bindValue()
 	 *
 	 * @throws MySqliException
 	 * @return MySqliQuery
 	 */
-	public function execute($parameters = null, $fetchMode = IQuery::FETCH_ASSOC) {
-		if (is_array($parameters)) {
-			$this->clearBinds();
-			foreach ($parameters as $param => $value) {
-				$this->bindValue($param, $value);
-			}
-		}
-
+	public function execute($fetchMode = IQuery::FETCH_ASSOC) {
 		if (!$this->prepareParameters()) {
 			throw new MySqliException("Failed to prepare parameters.");
 		}
