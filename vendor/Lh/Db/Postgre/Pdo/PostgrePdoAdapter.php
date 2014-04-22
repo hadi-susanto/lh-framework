@@ -20,9 +20,9 @@ use Lh\Db\Postgre\Builders\PostgreFactory;
 class PostgrePdoAdapter extends PdoAdapterBase {
 	/** @var int Postgre SQL default port */
 	protected $port = 5432;
-	/** @var PostgrePdoPlatform Platform tools for generate MySQL specific issues */
+	/** @var PostgrePdoPlatform Platform tools for generate server specific issues */
 	private $platform;
-	/** @var PostgreFactory */
+	/** @var PostgreFactory Singleton factory object */
 	private $factory;
 
 	/**

@@ -19,6 +19,7 @@ use Lh\Db\Query;
  * This class will use sqlsrv driver instead MsSql driver which obsoleted in PHP 5.3. LH Framework minimal requirement is PHP 5.3 therefore MsSql must be obsoleted
  * and it's usage is not recommended anymore.
  *
+ * @method resource getNativeConnector()
  * @package Lh\Db\MsSql
  */
 class MsSqlAdapter extends AdapterBase {
@@ -54,6 +55,7 @@ class MsSqlAdapter extends AdapterBase {
 		}
 
 		parent::__construct($server, $username, $password, $dbName, $options);
+		$this->methodPrefix = "sqlsrv_";
 	}
 
 
@@ -255,7 +257,7 @@ class MsSqlAdapter extends AdapterBase {
 	 * @param int    $fetchMode
 	 *
 	 * @throws MsSqlException
-	 * @return Query
+	 * @return MsSqlQuery
 	 */
 	protected function _query($query, $fetchMode) {
 		$result = sqlsrv_query($this->nativeConnector, $query, array(), array(
@@ -312,7 +314,10 @@ class MsSqlAdapter extends AdapterBase {
 	}
 
 	/**
+	 * Get last insert ID
+	 *
 	 * Return last auto-generated ID from last executed query or last value from sequence
+	 * ToDo: Using native method for performance purpose and remove redundant Query class
 	 *
 	 * @param null|string $sequenceName
 	 *

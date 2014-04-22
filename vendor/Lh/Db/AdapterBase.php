@@ -137,6 +137,8 @@ abstract class AdapterBase implements IAdapter {
 	protected abstract function createException($message, $code = 0, Exception $previousException = null);
 
 	/**
+	 * Open connection
+	 *
 	 * Open connection database server / engine. Any resource or object represent the connection will be stored at nativeConnector property
 	 * NOTE: This method only bootstrap for open connection. Actual process implemented by _open()
 	 *
@@ -170,6 +172,8 @@ abstract class AdapterBase implements IAdapter {
 	}
 
 	/**
+	 * Connect to database
+	 *
 	 * Actual process which opening connection to database server / engine.
 	 * This method must supply native object into nativeConnector
 	 *
@@ -178,6 +182,8 @@ abstract class AdapterBase implements IAdapter {
 	protected abstract function _open();
 
 	/**
+	 * Close connection
+	 *
 	 * Close underlying connection. This method provided just for your convenience. PHP will automatically closed connection.
 	 * NOTE: This method only bootstrap for closing connection. Actual implementation at _close()
 	 *

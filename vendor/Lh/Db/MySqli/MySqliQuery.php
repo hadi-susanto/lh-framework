@@ -17,8 +17,11 @@ use Lh\Db\ResultSet;
  * Class MySqliQuery
  *
  * @package Lh\Db\MySqli
+ * @method \mysqli_result getNativeReader()
  */
 class MySqliQuery extends Query {
+	/** @var \mysqli_result  Mysqli native reader */
+	protected $nativeReader;
 	/** @var int Affected rows */
 	private $affectedRows = 0;
 	/** @var bool Do current query have a reader? */

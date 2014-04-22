@@ -23,7 +23,7 @@ class MsSqlFactory implements IFactory {
 	private $adapter;
 
 	/**
-	 * Create new instance of MySqlFactory
+	 * Create new instance of MsSqlFactory
 	 *
 	 * @param IAdapter $adapter
 	 */

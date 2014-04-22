@@ -9,11 +9,8 @@
 namespace Lh\Db\MsSql\Pdo;
 
 use Exception;
-use Lh\Db\IPlatform;
 use Lh\Db\MsSql\Builders\MsSqlFactory;
-use Lh\Db\Pdo\IPdoStatement;
 use Lh\Db\Pdo\PdoAdapterBase;
-use Lh\Db\Pdo\PdoQuery;
 
 /**
  * Class MsSqlPdoAdapter
@@ -45,9 +42,9 @@ class MsSqlPdoAdapter extends PdoAdapterBase {
 	/** @var int SQL Server port */
 	protected $port = 1433;
 
-	/** @var MsSqlPdoPlatform Platform tools for generate MySQL specific issues */
+	/** @var MsSqlPdoPlatform Platform tools for generate server specific issues */
 	private $platform;
-	/** @var \Lh\Db\MsSql\Builders\MsSqlFactory */
+	/** @var MsSqlFactory Singleton factory object */
 	private $factory;
 
 	/**
@@ -90,7 +87,7 @@ class MsSqlPdoAdapter extends PdoAdapterBase {
 	 * Platform object used in conjunction with Builder Factory to provide portability between database engine. Platform object is responsible for
 	 * escaping any value and quoting it.
 	 *
-	 * @return IPlatform
+	 * @return MsSqlPdoPlatform
 	 */
 	public function getPlatform() {
 		if ($this->platform === null) {

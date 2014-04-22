@@ -24,7 +24,7 @@ class MsSqlPdoStatement extends LhPdoStatement {
 	 * @param int       $code
 	 * @param Exception $previousException
 	 *
-	 * @return \Lh\Db\DbException
+	 * @return MsSqlPdoException
 	 */
 	protected function createException($message, $code = 0, Exception $previousException = null) {
 		return new MsSqlPdoException($message, $code, $previousException);

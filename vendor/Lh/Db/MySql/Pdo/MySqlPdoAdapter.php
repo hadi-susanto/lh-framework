@@ -11,7 +11,6 @@ namespace Lh\Db\MySql\Pdo;
 use Exception;
 use Lh\Db\Pdo\PdoAdapterBase;
 use Lh\Db\MySql\Builders\MySqlFactory;
-use PDOStatement;
 
 /**
  * Class MySqlPdoAdapter
@@ -122,7 +121,7 @@ class MySqlPdoAdapter extends PdoAdapterBase {
 	 * @param int       $code
 	 * @param Exception $previousException
 	 *
-	 * @return \Lh\Db\DbException
+	 * @return MySqlPdoException
 	 */
 	protected function createException($message, $code = 0, Exception $previousException = null) {
 		return new MySqlPdoException($message, $code, $previousException);
@@ -131,12 +130,12 @@ class MySqlPdoAdapter extends PdoAdapterBase {
 	/**
 	 * Create specialized PdoQuery object
 	 *
-	 * @param PDOStatement $statement
-	 * @param int          $fetchMode
+	 * @param \PDOStatement $statement
+	 * @param int           $fetchMode
 	 *
 	 * @return MySqlPdoQuery
 	 */
-	protected function createQuery(PDOStatement &$statement, &$fetchMode) {
+	protected function createQuery(\PDOStatement &$statement, &$fetchMode) {
 		return new MySqlPdoQuery($statement, $fetchMode);
 	}
 
@@ -147,7 +146,7 @@ class MySqlPdoAdapter extends PdoAdapterBase {
 	 *
 	 * @return MySqlPdoStatement
 	 */
-	protected function createStatement(PDOStatement &$statement) {
+	protected function createStatement(\PDOStatement &$statement) {
 		return new MySqlPdoStatement($statement);
 	}
 }

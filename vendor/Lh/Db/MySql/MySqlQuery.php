@@ -17,8 +17,11 @@ use Lh\Db\ResultSet;
  * Class MySqlQuery
  *
  * @package Lh\Db\MySql
+ * @method resource getNativeReader()
  */
 class MySqlQuery extends Query {
+	/** @var resource Mysql native reader */
+	protected $nativeReader;
 	/** @var int Affected row(s) from previous query. Contains total rows if SELECT query */
 	private $affectedRows = 0;
 	/** @var bool Does current query have a native reader */

@@ -199,7 +199,7 @@ class MySqliAdapter extends AdapterBase {
 	 * @param string $query
 	 * @param array  $driverOptions
 	 *
-	 * @return \Lh\Db\IStatement|MySqliStatement|null
+	 * @return MySqliStatement
 	 */
 	protected function _prepareQuery($query, $driverOptions) {
 		$result = $this->nativeConnector->prepare($query);

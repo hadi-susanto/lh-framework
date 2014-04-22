@@ -28,7 +28,6 @@ class MsSqlPdoException extends DbException {
 		parent::__construct($message, $code, $previous);
 		$this->dbEngine = __NAMESPACE__;
 	}
-
 }
 
-// End of File: MsSqlPdoException.php 
+// End of File: MsSqlPdoException.php

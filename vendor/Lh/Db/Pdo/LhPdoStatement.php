@@ -224,7 +224,7 @@ abstract class LhPdoStatement implements IPdoStatement {
 	 * @param \PdoStatement $statement
 	 * @param int           $fetchMode
 	 *
-	 * @return PdoQuery
+	 * @return \Lh\Db\Pdo\PdoQuery
 	 */
 	protected abstract function createPdoQuery(\PdoStatement &$statement, &$fetchMode);
 }
