@@ -47,6 +47,7 @@ class DbManager extends ServiceBase {
 		"mysqli" => "Lh\\Db\\MySqli\\MySqliAdapter",
 		"mssql" => "Lh\\Db\\MsSql\\MsSqlAdapter",
 		"sqlsrv" => "Lh\\Db\\MsSql\\MsSqlAdapter",
+		"postgre" => "Lh\\Db\\Postgre\\PostgreAdapter",
 		"pdo.mysql" => "Lh\\Db\\MySql\\Pdo\\MySqlPdoAdapter",
 		"pdo.mssql" => "Lh\\Db\\MsSql\\Pdo\\MsSqlPdoAdapter",
 		"pdo.sqlsrv" => "Lh\\Db\\MsSql\\Pdo\\MsSqlPdoAdapter",
