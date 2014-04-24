@@ -70,6 +70,8 @@ class HttpRequest {
 	 * @var Dictionary
 	 */
 	private $namedParameters;
+	/** @var string Client IP Address. WARNING: This maybe invalid since it's can be easily spoofed. */
+	private $clientIp;
 
 	/**
 	 * HttpRequest will represent user request and their data populated from browser. This class will be treated like 'singleton' since there is only one request each life cycle normally.
@@ -179,6 +181,41 @@ class HttpRequest {
 	 */
 	public function getNamedParameters() {
 		return $this->namedParameters;
+	}
+
+	/**
+	 * Get client IP Address
+	 *
+	 * This will ty to detect client IP address using server variable. Be warn that this value can be easily spoofed by user or by proxy server. This client IP
+	 * is provided to give chance developer to detect their client.
+	 *
+	 * @link http://www.kavoir.com/2010/03/php-how-to-detect-get-the-real-client-ip-address-of-website-visitors.html
+	 *
+	 * @return string
+	 */
+	public function getClientIp() {
+		if ($this->clientIp !== null) {
+			return $this->clientIp;
+		}
+
+		$searchIn = array("HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR", "HTTP_X_FORWARDED", "HTTP_X_CLUSTER_CLIENT_IP", "HTTP_FORWARDED_FOR", "HTTP_FORWARDED", "REMOTE_ADDR");
+		foreach ($searchIn as $key) {
+			if ($this->servers->containsKey($key)) {
+				$addresses = explode(",", $this->servers->get($key));
+
+				foreach ($addresses as $address) {
+					if (filter_var($address, FILTER_VALIDATE_IP)) {
+						$this->clientIp = $address;
+
+						return $this->clientIp;
+					}
+				}
+			}
+		}
+		// We unable to determine client IP address
+		$this->clientIp = "";
+
+		return $this->clientIp;
 	}
 
 	/**
