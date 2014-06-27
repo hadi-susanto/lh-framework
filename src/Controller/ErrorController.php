@@ -13,9 +13,26 @@ use Lh\Mvc\IExceptionError;
  *  - By default all of methods will use 'error/generic.phtml' template
  */
 class ErrorController extends ControllerBase implements IBasicError, IExceptionError, IAuthenticationError {
+	/** @var bool Determine whether application running in debug mode or not. Route data only printed when debug mode is set. */
+	private $isDebug;
+	/** @var \Lh\Web\RouteData Store current route data which cause an error */
+	private $routeData;
+	/** @var string Human readable route data. Only set if application running in debug mode. */
+	private $readableRouteData = null;
+
 	public function initialize() {
 		parent::initialize();
 		$this->pageView->setViewFileName("error/generic");
+
+		$this->isDebug = \Lh\Web\Application::getInstance()->isDebug();
+		if ($this->dispatcher->getPreviousInstance() != null) {
+			$this->routeData = $this->dispatcher->getPreviousInstance()->getRouteData();
+		}
+		if ($this->isDebug && $this->routeData != null) {
+			foreach ($this->routeData->toArray() as $key => $value) {
+				$this->readableRouteData .= sprintf("\n %-17s : %s", "$key", (is_array($value) ? \Lh\Utilities\Collections\ArrayExtension::toString($value) : $value));
+			}
+		}
 	}
 
 	/**
@@ -38,7 +55,11 @@ class ErrorController extends ControllerBase implements IBasicError, IExceptionE
 	 * @return void
 	 */
 	public function noFileAction() {
-		$this->pageView->addVar("message", "There is no controller file while dispatching request. Please contact web administrator about this URL.");
+		if ($this->isDebug) {
+			$this->pageView->addVar("message", "There is no controller file while dispatching request. Please contact web administrator about this URL.\nCurrent route:" . $this->readableRouteData);
+		} else {
+			$this->pageView->addVar("message", "There is no controller file while dispatching request. Please contact web administrator about this URL.");
+		}
 		$this->pageView->addVar("type", "Controller Class Definition Missing");
 	}
 
@@ -50,7 +71,11 @@ class ErrorController extends ControllerBase implements IBasicError, IExceptionE
 	 * @return void
 	 */
 	public function noClassAction() {
-		$this->pageView->addVar("message", "There is no controller class while dispatching request. Please contact web administrator about this URL.");
+		if ($this->isDebug) {
+			$this->pageView->addVar("message", "There is no controller class while dispatching request. Please contact web administrator about this URL.\nCurrent route:" . $this->readableRouteData);
+		} else {
+			$this->pageView->addVar("message", "There is no controller class while dispatching request. Please contact web administrator about this URL.");
+		}
 		$this->pageView->addVar("type", "Controller Class Name Mismatch");
 	}
 
@@ -62,7 +87,11 @@ class ErrorController extends ControllerBase implements IBasicError, IExceptionE
 	 * @return void
 	 */
 	public function noMethodAction() {
-		$this->pageView->addVar("message", "There is no associated method in current controller. Please contact web administrator about this URL.");
+		if ($this->isDebug) {
+			$this->pageView->addVar("message", "There is no associated method in current controller. Please contact web administrator about this URL.\nCurrent route:" . $this->readableRouteData);
+		} else {
+			$this->pageView->addVar("message", "There is no associated method in current controller. Please contact web administrator about this URL.");
+		}
 		$this->pageView->addVar("type", "Method Not Found in Controller Class");
 	}
 
@@ -72,7 +101,11 @@ class ErrorController extends ControllerBase implements IBasicError, IExceptionE
 	 * @return void
 	 */
 	public function noViewAction() {
-		$this->pageView->addVar("message", "There is no associated VIEW file for current request. Please contact web administrator about this URL.");
+		if ($this->isDebug) {
+			$this->pageView->addVar("message", "There is no associated VIEW file for current request. Please contact web administrator about this URL.\nCurrent route:" . $this->readableRouteData);
+		} else {
+			$this->pageView->addVar("message", "There is no associated VIEW file for current request. Please contact web administrator about this URL.");
+		}
 		$this->pageView->addVar("type", "View File Not Found");
 	}
 
@@ -156,7 +189,11 @@ class ErrorController extends ControllerBase implements IBasicError, IExceptionE
 	 * @return void
 	 */
 	public function notAuthenticatedAction() {
-		$this->pageView->addVar("message", "Authentication is required to access this resource.");
+		if ($this->isDebug) {
+			$this->pageView->addVar("message", "Authentication is required to access this resource.\nCurrent route:" . $this->readableRouteData);
+		} else {
+			$this->pageView->addVar("message", "Authentication is required to access this resource.");
+		}
 		$this->pageView->addVar("type", "Authentication Required");
 	}
 
@@ -166,7 +203,11 @@ class ErrorController extends ControllerBase implements IBasicError, IExceptionE
 	 * @return void
 	 */
 	public function notAuthorizedAction() {
-		$this->pageView->addVar("message", "Sorry you're not authorized to access this resource.");
+		if ($this->isDebug) {
+			$this->pageView->addVar("message", "Sorry you're not authorized to access this resource.\nCurrent route:" . $this->readableRouteData);
+		} else {
+			$this->pageView->addVar("message", "Sorry you're not authorized to access this resource.");
+		}
 		$this->pageView->addVar("type", "Not Authorized");
 	}
 }
