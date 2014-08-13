@@ -30,14 +30,15 @@ class Css extends Element {
 	public function __construct($src = null, $type = "text/css") {
 		if ($src === null) {
 			parent::__construct("style", null);
+			$this->linkedStyle = false;
 		} else {
 			parent::__construct("link", null);
-			$this->addAttribute("href", $src);
-			$this->addAttribute("rel", "stylesheet");
+			parent::addAttribute("rel", "stylesheet");
+			parent::addAttribute("href", $src);
 			$this->linkedStyle = true;
 		}
 
-		$this->addAttribute("type", $type);
+		parent::addAttribute("type", $type);
 		$this->setShortStyleAllowed(true);
 	}
 
@@ -54,7 +55,9 @@ class Css extends Element {
 	 */
 	public function addAttribute($name, $value) {
 		parent::addAttribute($name, $value);
-		if (strtolower($name) == "href") {
+
+		$name = strtolower($name);
+		if ($name == "href") {
 			$this->linkedStyle = true;
 			$this->setTagName("link");
 			parent::addAttribute("rel", "stylesheet");
@@ -64,16 +67,22 @@ class Css extends Element {
 	/**
 	 * Remove an attribute from element
 	 *
-	 * Similar to Css::addAttribute(), removing 'href' will change its name into <STYLE>
+	 * Similar to Css::addAttribute(), removing 'href' or 'rel' will change its element into <STYLE>
 	 *
 	 * @param string $name
 	 */
 	public function removeAttribute($name) {
 		parent::removeAttribute($name);
-		if (strtolower($name) == "href") {
+
+		$name = strtolower($name);
+		if ($name == "href") {
 			$this->linkedStyle = false;
 			$this->setTagName("style");
 			parent::removeAttribute("rel");
+		} else if ($name == "rel") {
+			$this->linkedStyle = false;
+			$this->setTagName("style");
+			parent::removeAttribute("href");
 		}
 	}
 
@@ -109,7 +118,10 @@ class Css extends Element {
 		if ($this->linkedStyle) {
 			return sprintf('<link %s />', $this->compileAttributes());
 		} else {
-			return sprintf('<%1$s %2$s>%3$s</%1$s>', $this->tagName, $this->compileAttributes(), $this->value);
+			// Make sure our <STYLE> don't have 'rel' attribute
+			parent::removeAttribute("rel");
+
+			return sprintf('<style %s>%s</style>', $this->compileAttributes(), $this->value);
 		}
 	}
 }
