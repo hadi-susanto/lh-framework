@@ -29,11 +29,11 @@ class File implements ISessionHandler {
 	/** @var int Session threshold */
 	private $threshold;
 	/** @var string Session file extension */
-	private $fileExt;
+	private $fileExt = "";
 	/** @var string Filename pattern. Should contains [id] */
-	private $pattern;
+	private $pattern = "sess_[id]";
 	/** @var string contains actual formatter for file-name in session file */
-	private $_pattern;
+	private $_pattern = "sess_%s";
 
 	/**
 	 * Create session handler which use plain text file as persistent storage
@@ -140,6 +140,12 @@ class File implements ISessionHandler {
 	/**
 	 * Configure current seesion handler
 	 *
+	 * Available options key:
+	 *  - 'savePath'	: Where this handler look for session file
+	 *  - 'threshold'	: Session threshold before auto deletion
+	 *  - 'fileExt'		: Session file extension
+	 *  - 'pattern'		: Session filename pattern. MUST contain '[id]' without quote
+	 *
 	 * @param array $options
 	 *
 	 * @return void
@@ -210,7 +216,9 @@ class File implements ISessionHandler {
 	 * @return string
 	 */
 	public function read($sessionId) {
-		return (string)@file_get_contents($this->savePath . sprintf($this->_pattern, $sessionId));
+		$file = $this->savePath . sprintf($this->_pattern, $sessionId);
+
+		return is_file($file) ? (string)@file_get_contents($file) : "";
 	}
 
 	/**

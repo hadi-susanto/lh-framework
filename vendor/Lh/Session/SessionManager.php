@@ -34,7 +34,6 @@ class SessionManager extends ServiceBase {
 	public function __construct(ServiceLocator $serviceLocator) {
 		parent::__construct($serviceLocator);
 		$serviceLocator->setSessionManager($this);
-		$this->storage = array();
 	}
 
 	/**
