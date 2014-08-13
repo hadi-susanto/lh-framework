@@ -33,16 +33,20 @@ use Lh\Web\Html\Script;
  * @package Lh\Mvc
  */
 class MasterView extends ViewBase {
+	const PREPEND_HEAD_TITLE = 'PREPEND';
+	const APPEND_HEAD_TITLE = 'APPEND';
+	const SET_HEAD_TITLE = 'SET';
+
 	/** @var string Doctype for master page */
 	private $docType;
 	/** @var string Customizable <TITLE> */
 	private $headTitle;
 	/** @var Meta[] Customizable <META> */
-	private $meta;
+	private $meta = array();
 	/** @var Script[] Customizable <SCRIPT> */
-	private $scripts;
+	private $scripts = array();
 	/** @var Css[] Customizable <STYLE> or <LINK> */
-	private $styles;
+	private $styles = array();
 	/** @var PageView Main page view used in renderBody() */
 	private $bodyContent;
 	/**
@@ -101,10 +105,24 @@ class MasterView extends ViewBase {
 	/**
 	 * Set string title for current view
 	 *
+	 * Head title should be retrieved using getHeadTitle method from current class. And master page file should be render this title since LH Framework don't
+	 * automagically change HTML title. By default set head title will replace current title
+	 *
 	 * @param string $headTitle
+	 * @param string $mode
 	 */
-	public function setHeadTitle($headTitle) {
-		$this->headTitle = $headTitle;
+	public function setHeadTitle($headTitle, $mode = MasterView::SET_HEAD_TITLE) {
+		switch (strtoupper($mode)) {
+			case self::PREPEND_HEAD_TITLE:
+				$this->headTitle = $headTitle . $this->headTitle;
+				break;
+			case self::APPEND_HEAD_TITLE:
+				$this->headTitle = $this->headTitle . $headTitle;
+				break;
+			default:
+				$this->headTitle = $headTitle;
+				break;
+		}
 	}
 
 	/**
