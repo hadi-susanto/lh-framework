@@ -46,9 +46,9 @@ class Where implements ILiteral {
 		}
 
 		$this->platform = $platform;
-		$this->field = trim($field);
+		$this->field = $field;
 		$this->value = $value;
-		$this->operator = trim($operator);
+		$this->operator = $operator;
 	}
 
 	/**
