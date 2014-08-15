@@ -28,7 +28,7 @@ interface IDelete extends ISql {
 	/**
 	 * Add a WHERE clause to the DELETE statement
 	 *
-	 * @param string                        $field
+	 * @param string|ILiteral               $field
 	 * @param null|string|int|array|ISelect $value
 	 * @param string                        $operator
 	 *

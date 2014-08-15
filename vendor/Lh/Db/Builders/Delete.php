@@ -142,7 +142,7 @@ class Delete implements IDelete {
 	/**
 	 * Add a WHERE clause to the DELETE statement
 	 *
-	 * @param string                        $field
+	 * @param string|ILiteral               $field
 	 * @param array|int|ISelect|null|string $value
 	 * @param string                        $operator
 	 *

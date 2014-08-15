@@ -19,7 +19,7 @@ use Lh\Db\Query;
  * @method resource getNativeReader()
  */
 class MsSqlQuery extends Query {
-	/** @var resource Sqlsrv native statement */
+	/** @var resource Sqlsrv native reader */
 	protected $nativeReader;
 
 	/**

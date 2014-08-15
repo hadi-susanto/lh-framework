@@ -11,6 +11,11 @@ namespace Lh\Db\Postgre\Pdo;
 use Exception;
 use Lh\Db\Pdo\LhPdoStatement;
 
+/**
+ * Class PostgrePdoStatement
+ *
+ * @package Lh\Db\Postgre\Pdo
+ */
 class PostgrePdoStatement extends LhPdoStatement {
 
 	/**

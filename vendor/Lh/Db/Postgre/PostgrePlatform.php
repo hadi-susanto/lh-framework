@@ -10,6 +10,11 @@ namespace Lh\Db\Postgre;
 
 use Lh\Db\IPlatform;
 
+/**
+ * Class PostgrePlatform
+ *
+ * @package Lh\Db\Postgre
+ */
 class PostgrePlatform implements IPlatform {
 	/** @var bool Should we use pg_escape_identifier() when it's available */
 	private static $useIdentifierEscape;

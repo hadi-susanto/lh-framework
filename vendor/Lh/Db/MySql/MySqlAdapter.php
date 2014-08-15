@@ -229,8 +229,8 @@ class MySqlAdapter extends AdapterBase {
 	/**
 	 * MySQL driver don't support prepared query
 	 *
-	 * @param string $query
-	 * @param array  $driverOptions
+	 * @param string|ISql $query
+	 * @param array       $driverOptions
 	 *
 	 * @return IStatement|void
 	 * @throws MySqlException

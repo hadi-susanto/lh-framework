@@ -78,7 +78,7 @@ class DbManager extends ServiceBase {
 	 *
 	 * @param string $name
 	 *
-	 * @return AdapterBase|null
+	 * @return IAdapter|null
 	 */
 	public function getAdapter($name) {
 		if (array_key_exists($name, $this->adapters)) {
@@ -91,7 +91,7 @@ class DbManager extends ServiceBase {
 	/**
 	 * Retrieve default adapter
 	 *
-	 * @return AdapterBase|null
+	 * @return IAdapter|null
 	 */
 	public function getDefaultAdapter() {
 		return $this->getAdapter($this->defaultName);

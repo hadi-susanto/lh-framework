@@ -31,7 +31,7 @@ class Having implements ILiteral {
 	 * Create new instance of Having clause
 	 *
 	 * @param \Lh\Db\IPlatform $platform
-	 * @param string           $field
+	 * @param string|ILiteral  $field
 	 * @param string           $value
 	 * @param string           $operator
 	 *
@@ -46,9 +46,9 @@ class Having implements ILiteral {
 		}
 
 		$this->platform = $platform;
-		$this->field = trim($field);
+		$this->field = $field;
 		$this->value = $value;
-		$this->operator = trim($operator);
+		$this->operator = $operator;
 	}
 
 	/**

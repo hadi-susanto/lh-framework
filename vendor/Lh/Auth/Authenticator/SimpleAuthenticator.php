@@ -129,6 +129,8 @@ class SimpleAuthenticator implements IAuthenticator {
 
 	/**
 	 * Settings for Database authenticator. Available option(s) key:
+	 *  - 'algorithm'		=> Specify which algorithm for hashing. Support sha256 and md5
+	 *  - 'loop'			=> How many loop(s) will be applied for current algorithm.
 	 *  - 'adapterName'		=> Specify which database adapter to be used. It'll use default adapter when not specified
 	 *  - 'tableName'		=> Specify sessions table name
 	 *  - 'id'				=> Auto increment field.
@@ -151,7 +153,7 @@ class SimpleAuthenticator implements IAuthenticator {
 			$this->algorithm = $options["algorithm"];
 		}
 		if (isset($options["loop"]) && is_int($options["loop"])) {
-			$this->algorithm = $options["loop"];
+			$this->loop = $options["loop"];
 		}
 		if (isset($options["adapterName"]) && !empty($options["adapterName"])) {
 			$this->setAdapter($options["adapterName"]);
@@ -168,7 +170,11 @@ class SimpleAuthenticator implements IAuthenticator {
 			$this->columns["identity"] = $options["identity"];
 		}
 		if (isset($options["salt"]) && is_string($options["salt"])) {
-			$this->columns["salt"] = $options["salt"];
+			if ($options["salt"] == '') {
+				unset($this->columns["salt"]);
+			} else {
+				$this->columns["salt"] = $options["salt"];
+			}
 		}
 		if (isset($options["credential"]) && is_string($options["credential"])) {
 			$this->columns["credential"] = $options["credential"];
@@ -297,7 +303,10 @@ class SimpleAuthenticator implements IAuthenticator {
 	 * @return bool
 	 */
 	private function verify($credential) {
-		$credential = $this->rawData["salt"] . $credential;
+		if (array_key_exists("salt", $this->rawData)) {
+			$credential = $this->rawData["salt"] . $credential;
+		}
+
 		for ($i = 0; $i < $this->loop; $i++) {
 			$credential = hash($this->algorithm, $credential);
 		}

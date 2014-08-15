@@ -39,8 +39,8 @@ interface IUpdate extends ISql {
 	/**
 	 * Add a SET column_name = value clause to the UPDATE statement
 	 *
-	 * @param string     $field
-	 * @param string|int $value
+	 * @param string              $field
+	 * @param string|int|ILiteral $value
 	 *
 	 * @return IUpdate
 	 */
@@ -49,7 +49,7 @@ interface IUpdate extends ISql {
 	/**
 	 * Add a WHERE clause to the UPDATE statement
 	 *
-	 * @param string                        $field
+	 * @param string|ILiteral               $field
 	 * @param null|string|int|array|ISelect $value
 	 * @param string                        $operator
 	 *

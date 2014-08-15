@@ -196,8 +196,8 @@ class Update implements IUpdate {
 	/**
 	 * Add a SET column_name = value clause to the UPDATE statement
 	 *
-	 * @param string     $field
-	 * @param string|int $value
+	 * @param string              $field
+	 * @param string|int|ILiteral $value
 	 *
 	 * @throws \InvalidArgumentException
 	 * @return IUpdate
@@ -216,7 +216,7 @@ class Update implements IUpdate {
 	/**
 	 * Add a WHERE clause to the UPDATE statement
 	 *
-	 * @param string                        $field
+	 * @param string|ILiteral               $field
 	 * @param null|string|int|array|ISelect $value
 	 * @param string                        $operator
 	 *

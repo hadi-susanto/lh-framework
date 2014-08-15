@@ -109,8 +109,8 @@ interface IAdapter {
 	 * Prepare query for repeated execution and return statement object for further processing. It's a common sense to provide parameter in the query.
 	 * Parameter are driver dependent please use SQL builder for preparing the SQL for portability.
 	 *
-	 * @param string $query
-	 * @param array  $driverOptions
+	 * @param string|ISql $query
+	 * @param array       $driverOptions
 	 *
 	 * @return IStatement
 	 */
