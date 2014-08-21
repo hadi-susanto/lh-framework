@@ -165,6 +165,62 @@ class ErrorController extends ControllerBase implements IBasicError, IExceptionE
 		}
 		// Remove any sensitive information
 		$this->pageView->addVar("message", str_replace(APPLICATION_PATH, '', $message));
+
+		$previousException = $ex->getPrevious();
+		$previousMessage = "";
+		while ($previousException instanceof Exception) {
+			if ($previousMessage != "") {
+				$previousMessage .= "\n\n";
+			}
+
+			if ($previousException instanceof Lh\Exceptions\PhpErrorException) {
+				$this->pageView->addVar("type", "PHP Error");
+				/** @var Lh\Exceptions\PhpErrorException $previousException */
+				$previousMessage .= sprintf("Severity  : %s (Code: %s)", $previousException->getSeverityAsText(), $previousException->getSeverity());
+			} else {
+				$this->pageView->addVar("type", "Unexpected Exception");
+				$previousMessage .= "Exception : " . get_class($previousException);
+			}
+			$previousMessage .= "<br />Message   : " . $previousException->getMessage();
+			$previousMessage .= "<br />" . sprintf("Location  : %s (Line: %s)", $previousException->getFile(), $previousException->getLine());
+			$previousMessage .= "<br />Stack Trace: ";
+			foreach ($previousException->getTrace() as $idx => $trace) {
+				if (count($trace["args"]) < 3) {
+					$buff = array();
+					foreach ($trace["args"] as $arg) {
+						if (is_string($arg)) {
+							$buff[] = "'$arg'";
+						} else if (is_object($arg)) {
+							$buff[] = get_class($arg);
+						} else {
+							$buff[] = "" . $arg;
+						}
+					}
+
+					$args = implode(", ", $buff);
+				} else {
+					$args = "...";
+				}
+				if (isset($trace["class"])) {
+					$previousMessage .= sprintf("\n %3s. %s%s%s(%s)", ($idx + 1), $trace["class"], $trace["type"], $trace["function"], $args);
+				} else if (isset($trace["function"])) {
+					$previousMessage .= sprintf("\n %3s. %s(%s)", ($idx + 1), $trace["function"], $args);
+				} else {
+					$previousMessage .= sprintf("\n %3s. Unknown method or function", ($idx + 1));
+				}
+
+				if (isset($trace["file"])) {
+					$previousMessage .= sprintf(" at %s (Line: %s)", $trace["file"], $trace["line"]);
+				} else {
+					$previousMessage .= " at unknown source (Line: n.a.)";
+				}
+			}
+
+			// Check for another previous exception
+			$previousException = $previousException->getPrevious();
+		}
+
+		$this->pageView->addVar("previousMessage", str_replace(APPLICATION_PATH, '', $previousMessage));
 	}
 
 	/**
