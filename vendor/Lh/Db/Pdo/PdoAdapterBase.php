@@ -57,8 +57,6 @@ abstract class PdoAdapterBase implements IPdoAdapter {
 	private $errorMessage;
 	/** @var ReflectionClass Reflection of PDO object. Used to call method directly from PDO object */
 	private $reflection;
-	/** @var LhPdoStatement Previous executed statement */
-	private $previousStatement;
 
 	/**
 	 * Get PDO init options
@@ -307,9 +305,6 @@ abstract class PdoAdapterBase implements IPdoAdapter {
 				return null;
 			}
 			$this->resetError();
-			if ($this->previousStatement !== null) {
-				$this->previousStatement->close();
-			}
 
 			if (is_string($query)) {
 				$result = $this->nativeConnector->query($query);
@@ -320,11 +315,8 @@ abstract class PdoAdapterBase implements IPdoAdapter {
 			}
 
 			if ($result instanceof \PDOStatement) {
-				$this->previousStatement = $this->createStatement($result);
-
 				return $this->createQuery($result, $fetchMode);
 			} else {
-				$this->previousStatement = null;
 				$errorInfo = $this->nativeConnector->errorInfo();
 				$this->sqlState = $errorInfo[0];
 				$this->errorCode = $errorInfo[1];
@@ -367,9 +359,6 @@ abstract class PdoAdapterBase implements IPdoAdapter {
 				return null;
 			}
 			$this->resetError();
-			if ($this->previousStatement !== null) {
-				$this->previousStatement->close();
-			}
 
 			$parameters = new Dictionary();
 			if (is_string($query)) {
@@ -381,15 +370,14 @@ abstract class PdoAdapterBase implements IPdoAdapter {
 			}
 
 			if ($result instanceof \PDOStatement) {
-				$this->previousStatement = $this->createStatement($result);
+				$statement = $this->createStatement($result);
 				foreach ($parameters->getKeys() as $key) {
 					// Prevent calling DictionaryIterator
-					$this->previousStatement->bindValue($key, $parameters->get($key));
+					$statement->bindValue($key, $parameters->get($key));
 				}
 
-				return $this->previousStatement;
+				return $statement;
 			} else {
-				$this->previousStatement = null;
 				$errorInfo = $this->nativeConnector->errorInfo();
 				$this->sqlState = $errorInfo[0];
 				$this->errorCode = $errorInfo[1];
