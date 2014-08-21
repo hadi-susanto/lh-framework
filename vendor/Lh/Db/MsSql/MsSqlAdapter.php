@@ -12,6 +12,7 @@ use Exception;
 use Lh\Db\AdapterBase;
 use Lh\Db\MsSql\Builders\MsSqlFactory;
 use Lh\Db\Query;
+use string;
 
 /**
  * Class MsSqlAdapter
@@ -337,6 +338,38 @@ class MsSqlAdapter extends AdapterBase {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Get column(s) name from given table
+	 *
+	 * This will retrieve all column(s) name from a table in a database.
+	 * NOTE: This method will be obsoleted when a metadata feature added into LH Framework since it's only retrieve column name instead of column definition
+	 *
+	 * @param string $tableName
+	 *
+	 * @throws MsSqlException
+	 *
+	 * @return string[]
+	 */
+	public function getColumnNames($tableName) {
+		$query = $this->query("EXEC sp_columns " . $this->getPlatform()->quoteIdentifier($tableName));
+		if ($query == null) {
+			if ($this->getErrorMessage() != null) {
+				$innerException = $this->createException($this->getErrorMessage(), $this->getErrorCode());
+			} else {
+				$innerException = null;
+			}
+
+			throw $this->createException("Failed to retrieve column(s) detail using sp_columns procedure. Please check your connection", 0, $innerException);
+		}
+
+		$columns = array();
+		foreach ($query->fetchAll() as $row) {
+			$columns[] = $row["COLUMN_NAME"];
+		}
+
+		return $columns;
 	}
 }
 

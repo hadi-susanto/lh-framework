@@ -109,8 +109,8 @@ interface IAdapter {
 	 * Prepare query for repeated execution and return statement object for further processing. It's a common sense to provide parameter in the query.
 	 * Parameter are driver dependent please use SQL builder for preparing the SQL for portability.
 	 *
-	 * @param string|ISql $query
-	 * @param array       $driverOptions
+	 * @param string|Builders\ISql $query
+	 * @param array                $driverOptions
 	 *
 	 * @return IStatement
 	 */
@@ -154,6 +154,18 @@ interface IAdapter {
 	 * @return int
 	 */
 	public function lastInsertId($sequenceName = null);
+
+	/**
+	 * Get column(s) name from given table
+	 *
+	 * This will retrieve all column(s) name from a table in a database.
+	 * NOTE: This method will be obsoleted when a metadata feature added into LH Framework since it's only retrieve column name instead of column definition
+	 *
+	 * @param string $tableName
+	 *
+	 * @return string[]
+	 */
+	public function getColumnNames($tableName);
 
 	/**
 	 * Call native function provided by original php connector. Please refer to connector documentation for available method(s) and their parameter(s)

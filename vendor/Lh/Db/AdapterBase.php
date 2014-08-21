@@ -11,10 +11,7 @@ namespace Lh\Db;
 use Exception;
 use Lh\ApplicationException;
 use Lh\Collections\Dictionary;
-use Lh\Db\Builders\ISelect;
 use Lh\Db\Builders\ISql;
-use Lh\Db\DbException;
-use Lh\Db\IQuery;
 use Lh\Exceptions\MethodNotFoundException;
 use ReflectionClass;
 

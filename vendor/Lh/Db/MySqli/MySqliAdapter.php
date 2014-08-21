@@ -258,6 +258,38 @@ class MySqliAdapter extends AdapterBase {
 			return null;
 		}
 	}
+
+	/**
+	 * Get column(s) name from given table
+	 *
+	 * This will retrieve all column(s) name from a table in a database.
+	 * NOTE: This method will be obsoleted when a metadata feature added into LH Framework since it's only retrieve column name instead of column definition
+	 *
+	 * @param string $tableName
+	 *
+	 * @throws MySqliException
+	 *
+	 * @return string[]
+	 */
+	public function getColumnNames($tableName) {
+		$query = $this->query("DESCRIBE " . $this->getPlatform()->quoteIdentifier($tableName));
+		if ($query == null) {
+			if ($this->getErrorMessage() != null) {
+				$innerException = $this->createException($this->getErrorMessage(), $this->getErrorCode());
+			} else {
+				$innerException = null;
+			}
+
+			throw $this->createException("Failed to retrieve column(s) detail using DESCRIBE query. Please check your connection", 0, $innerException);
+		}
+
+		$columns = array();
+		foreach ($query->fetchAll() as $row) {
+			$columns[] = $row["Field"];
+		}
+
+		return $columns;
+	}
 }
 
 // End of File: MySqliAdapter.php
