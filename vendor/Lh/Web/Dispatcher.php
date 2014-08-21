@@ -508,7 +508,7 @@ class Dispatcher {
 	 * @param bool        $useNewResponseObject
 	 */
 	public function dispatchNoFile($httpErrorCode = 500, $httpErrorMessage = null, $useNewResponseObject = true) {
-		$routeData = new RouteData($this->previousInstance !== null ? $this->previousInstance->getRouteData() : null);
+		$routeData = new RouteData();
 		$routeData->setControllerSegment("error");
 		$routeData->setMethodSegment("no-file");
 
@@ -526,7 +526,7 @@ class Dispatcher {
 	 * @param bool        $useNewResponseObject
 	 */
 	public function dispatchNoClass($httpErrorCode = 500, $httpErrorMessage = null, $useNewResponseObject = true) {
-		$routeData = new RouteData($this->previousInstance !== null ? $this->previousInstance->getRouteData() : null);
+		$routeData = new RouteData();
 		$routeData->setControllerSegment("error");
 		$routeData->setMethodSegment("no-class");
 
@@ -543,7 +543,7 @@ class Dispatcher {
 	 * @param bool        $useNewResponseObject
 	 */
 	public function dispatchNoMethod($httpErrorCode = 500, $httpErrorMessage = null, $useNewResponseObject = true) {
-		$routeData = new RouteData($this->previousInstance !== null ? $this->previousInstance->getRouteData() : null);
+		$routeData = new RouteData();
 		$routeData->setControllerSegment("error");
 		$routeData->setMethodSegment("no-method");
 
@@ -561,7 +561,7 @@ class Dispatcher {
 	 * @param bool        $useNewResponseObject
 	 */
 	public function dispatchNoView($httpErrorCode = 500, $httpErrorMessage = null, $useNewResponseObject = true) {
-		$routeData = new RouteData($this->previousInstance !== null ? $this->previousInstance->getRouteData() : null);
+		$routeData = new RouteData();
 		$routeData->setControllerSegment("error");
 		$routeData->setMethodSegment("no-view");
 
@@ -579,7 +579,7 @@ class Dispatcher {
 	 * @param bool        $useNewResponseObject
 	 */
 	public function dispatchError($errorMessage, $httpErrorCode = 500, $httpErrorMessage = null, $useNewResponseObject = true) {
-		$routeData = new RouteData($this->previousInstance !== null ? $this->previousInstance->getRouteData() : null);
+		$routeData = new RouteData();
 		$routeData->setControllerSegment("error");
 		$routeData->setMethodSegment("generic");
 
@@ -600,7 +600,7 @@ class Dispatcher {
 	 * @param bool        $useNewResponseObject
 	 */
 	public function dispatchException(Exception $ex, $source, $httpErrorCode = 500, $httpErrorMessage = null, $useNewResponseObject = true) {
-		$routeData = new RouteData($this->previousInstance !== null ? $this->previousInstance->getRouteData() : null);
+		$routeData = new RouteData();
 		$routeData->setControllerSegment("error");
 		$routeData->setMethodSegment("un-caught");
 
@@ -622,7 +622,7 @@ class Dispatcher {
 	 * @param bool        $useNewResponseObject
 	 */
 	public function dispatchNotAuthenticated($httpErrorCode = 403, $httpErrorMessage = null, $useNewResponseObject = true) {
-		$routeData = new RouteData($this->previousInstance !== null ? $this->previousInstance->getRouteData() : null);
+		$routeData = new RouteData();
 		$routeData->setControllerSegment("error");
 		$routeData->setMethodSegment("not-authenticated");
 
@@ -641,7 +641,7 @@ class Dispatcher {
 	 * @param bool        $useNewResponseObject
 	 */
 	public function dispatchNotAuthorized($httpErrorCode = 401, $httpErrorMessage = null, $useNewResponseObject = true) {
-		$routeData = new RouteData($this->previousInstance !== null ? $this->previousInstance->getRouteData() : null);
+		$routeData = new RouteData();
 		$routeData->setControllerSegment("error");
 		$routeData->setMethodSegment("not-authorized");
 
