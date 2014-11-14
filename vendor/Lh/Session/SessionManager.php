@@ -89,8 +89,8 @@ class SessionManager extends ServiceBase {
 			return;
 		}
 
-		session_start();
 		$this->started = true;
+		session_start();
 	}
 
 	/**

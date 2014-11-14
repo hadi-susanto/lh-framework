@@ -13,6 +13,7 @@ use Countable as ICountable;
 use IteratorAggregate as IIteratorAggregate;
 use Lh\Collections\KeyExistsException;
 use Lh\Collections\KeyNotFoundException;
+use Lh\Exceptions\ClassNotFoundException;
 use Lh\Web\Application;
 
 /**
@@ -61,7 +62,13 @@ class Storage implements IArrayAccess, ICountable, IIteratorAggregate {
 	 */
 	public function __construct($scope = 'default', $timeLimit = 0) {
 		$this->setScope($scope);
-		$this->getManager()->start();
+		try {
+			$this->getManager()->start();
+		} catch (ClassNotFoundException $ex) {
+			// Do nothing since ClassNotFoundException only occur when 'shared' session data contains object which can't be defined by our class (PHP Incomplete Class)
+			// 'Shared' session data means other application which reside in same public_html root folder. Maybe different framework co-exists in same root folder and they
+			// implements their own auto loader.
+		}
 		$this->createLinkToSession();
 		if ($this->metaData === null) {
 			$this->initStorage();
