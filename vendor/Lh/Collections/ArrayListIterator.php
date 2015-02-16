@@ -8,8 +8,8 @@
 
 namespace Lh\Collections;
 
-use ICountable;
-use ISeekableIterator;
+use Countable as ICountable;
+use SeekableIterator as ISeekableIterator;
 
 /**
  * Class ArrayListIterator
