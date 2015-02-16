@@ -299,7 +299,7 @@ class RouteData {
 				$buffer["methodSegment"] = $this->getMethodSegment();
 			}
 			if (count($this->namespaces) > 0) {
-				$buffer["namespaces"] = $this->getNamespaceSegments();
+				$buffer["namespaces"] = $this->getNamespaces();
 			}
 			if ($this->controllerClassName != null) {
 				$buffer["controller"] = $this->getControllerClassName();
