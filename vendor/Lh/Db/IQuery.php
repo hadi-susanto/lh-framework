@@ -2,7 +2,7 @@
 /**
  * LH Framework
  *
- * @author Hadi Susanto (lh_framework@yahoo.com)
+ * @author Hadi Susanto (hd.susanto@yahoo.com)
  * @copyright 2014
  */
 

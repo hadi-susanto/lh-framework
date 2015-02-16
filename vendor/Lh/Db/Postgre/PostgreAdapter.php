@@ -2,7 +2,7 @@
 /**
  * LH Framework
  *
- * @author Hadi Susanto (lh_framework@yahoo.com)
+ * @author Hadi Susanto (hd.susanto@yahoo.com)
  * @copyright 2014
  */
 
@@ -143,7 +143,7 @@ class PostgreAdapter extends AdapterBase {
 		} else if ($this->queryResource === false) {
 			return null;
 		} else {
-			throw new PostgreException("Unexpected return type from pg_query() function. Please contact lh_framework@yahoo.com about this issue or open ticket.");
+			throw new PostgreException("Unexpected return type from pg_query() function. Please contact hd.susanto@yahoo.com about this issue or open ticket.");
 		}
 	}
 

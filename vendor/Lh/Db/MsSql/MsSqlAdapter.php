@@ -2,7 +2,7 @@
 /**
  * LH Framework
  *
- * @author Hadi Susanto (lh_framework@yahoo.com)
+ * @author Hadi Susanto (hd.susanto@yahoo.com)
  * @copyright 2014
  */
 
@@ -271,7 +271,7 @@ class MsSqlAdapter extends AdapterBase {
 			return new MsSqlQuery($result, $fetchMode);
 		} else {
 			// Unexpected return type by LH Framework driver... Maybe latest driver support more return type
-			throw new MsSqlException("Unexpected return type from sqlsrv_query() function. Please contact lh_framework@yahoo.com about this issue or open ticket.");
+			throw new MsSqlException("Unexpected return type from sqlsrv_query() function. Please contact hd.susanto@yahoo.com about this issue or open ticket.");
 		}
 	}
 
