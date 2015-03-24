@@ -243,6 +243,10 @@ class DbManager extends ServiceBase {
 			throw new InvalidOperationException(sprintf("Unable cast %s as AdapterBase class", get_class($adapter)));
 		}
 
+		if (!$adapter->isDriverAvailable()) {
+			throw new DriverNotFoundException("Unable to use '$driver' adapter since its driver is unavailable.");
+		}
+
 		$this->adapters[$name] = $adapter;
 		if ($this->defaultName === null) {
 			$this->defaultName = $name;

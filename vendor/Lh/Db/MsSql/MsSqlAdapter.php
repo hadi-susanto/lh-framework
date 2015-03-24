@@ -70,6 +70,17 @@ class MsSqlAdapter extends AdapterBase {
 	}
 
 	/**
+	 * Used to detect whether current PHP Installation support this adapter or not. If current server don't support requested driver then AdapterManager will throw
+	 * an exception. This is a safety function to ensure that your web application will work with given adapter(s) configuration.
+	 *
+	 * @return bool
+	 */
+	public function isDriverAvailable() {
+		return extension_loaded("sqlsrv");
+	}
+
+
+	/**
 	 * Get error code from previous execution
 	 *
 	 * WARNING: This error code is database specific.

@@ -138,7 +138,7 @@ class File implements ISessionHandler {
 	}
 
 	/**
-	 * Configure current seesion handler
+	 * Configure current session handler
 	 *
 	 * Available options key:
 	 *  - 'savePath'	: Where this handler look for session file
