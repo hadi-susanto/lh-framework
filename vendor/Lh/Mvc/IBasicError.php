@@ -62,9 +62,20 @@ interface IBasicError {
 	public function noViewAction();
 
 	/**
+	 * This method will be dispatched when Dispatcher unable to find Master View of current loaded VIEW.
+	 * IMPORTANT: If this method called by Dispatcher::dispatchError() then there is an additional named parameter passed which named 'masterViewPath' which type is string
+	 *
+	 * @see PageView::setMasterView
+	 * @see MasterView
+	 *
+	 * @return void
+	 */
+	public function noMasterViewAction();
+
+	/**
 	 * This method will be called when user manually called Dispatcher::dispatchError() or your configuration file contains any error.
 	 * When configuration file contains error then Web Application will call this method instead of requested one.
-	 * IMPORTANT: If this method called by Dispatcher::dispatchError() then there is an additional named parameter passed which named 'errorMessages' in string[]
+	 * IMPORTANT: If this method called by Dispatcher::dispatchError() then there is an additional named parameter passed which named 'errorMessages' which type is string[]
 	 *
 	 * @see \Lh\Web\Application::start()
 	 * @see \Lh\Web\Dispatcher::dispatchError()

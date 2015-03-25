@@ -110,6 +110,25 @@ class ErrorController extends ControllerBase implements IBasicError, IExceptionE
 	}
 
 	/**
+	 * This method will be dispatched when Dispatcher unable to find Master View of current loaded VIEW.
+	 * IMPORTANT: If this method called by Dispatcher::dispatchError() then there is an additional named parameter passed which named 'masterViewPath' which type is string
+	 *
+	 * @see PageView::setMasterView
+	 * @see MasterView
+	 *
+	 * @return void
+	 */
+	public function noMasterViewAction() {
+		$masterViewFile = $this->getRequest()->getNamedParameter("masterViewPath");
+		if ($this->isDebug) {
+			$this->pageView->addVar("message", "Unable to load Master view '$masterViewFile'. Please contact web administrator about this URL.\nCurrent route:" . $this->readableRouteData);
+		} else {
+			$this->pageView->addVar("message", "Unable to load Master view '$masterViewFile'. Please contact web administrator about this URL.");
+		}
+		$this->pageView->addVar("type", "View File Not Found");
+	}
+
+	/**
 	 * This will be called whenever un-caught exception occurred while dispatching user request. Please examine previous dispatcher for further investigation
 	 * When this method called there is additional named parameter included:
 	 *  1. 'exception'    => Exception which thrown while code execution

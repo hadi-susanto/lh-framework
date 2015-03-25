@@ -463,7 +463,7 @@ class Dispatcher {
 			$masterView = $view->getMasterView();
 			if ($masterView !== null && $masterView->isRequireView()) {
 				if (!is_file($masterView->getViewFileName(true))) {
-					$this->dispatchNoView();
+					$this->dispatchNoMasterView($masterView->getViewFileName());
 
 					return;
 				}
@@ -564,6 +564,27 @@ class Dispatcher {
 		$routeData = new RouteData();
 		$routeData->setControllerSegment("error");
 		$routeData->setMethodSegment("no-view");
+
+		$this->processError($httpErrorCode, $httpErrorMessage, $useNewResponseObject, $routeData);
+	}
+
+	/**
+	 * Dispatch no-master-view sequence
+	 *
+	 * This will render server error to client since framework unable to find appropriate master view file from its view. This can be happen when user dynamically
+	 * set master view but there is no master view file.
+	 *
+	 * @param string      $masterViewPath
+	 * @param int         $httpErrorCode
+	 * @param null|string $httpErrorMessage
+	 * @param bool        $useNewResponseObject
+	 */
+	public function dispatchNoMasterView($masterViewPath, $httpErrorCode = 500, $httpErrorMessage = null, $useNewResponseObject = true) {
+		$routeData = new RouteData();
+		$routeData->setControllerSegment("error");
+		$routeData->setMethodSegment("no-master-view");
+
+		$routeData->addNamedParameter("masterViewPath", $masterViewPath);
 
 		$this->processError($httpErrorCode, $httpErrorMessage, $useNewResponseObject, $routeData);
 	}

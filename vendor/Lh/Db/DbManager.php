@@ -204,10 +204,11 @@ class DbManager extends ServiceBase {
 	 * @param array  $options
 	 *
 	 * @return bool
-	 * @throws \Lh\Collections\KeyExistsException
-	 * @throws \Lh\Exceptions\InvalidOperationException
-	 * @throws \InvalidArgumentException
-	 * @throws \Lh\Exceptions\ClassNotFoundException
+	 *
+	 * @throws ClassNotFoundException
+	 * @throws DriverNotFoundException
+	 * @throws InvalidOperationException
+	 * @throws KeyExistsException
 	 */
 	public function addAdapter($name, $driver, $server, $username, $password, $dbName, $options) {
 		$driver = $this->translateDriverName($driver);
