@@ -89,8 +89,18 @@ class SessionManager extends ServiceBase {
 			return;
 		}
 
-		$this->started = true;
-		session_start();
+		$loaderManager = $this->serviceLocator->getLoaderManager();
+		try {
+			// Make sure that any auto load error being ignored. Session data can contain classes which our framework unable to re-construct, this error should be handled by Storage class
+			$loaderManager->setSuppressAutoLoadError(true);
+			$this->started = true;
+			session_start();
+			$loaderManager->setSuppressAutoLoadError(false);
+		}
+		catch (\Exception $ex) {
+			$loaderManager->setSuppressAutoLoadError(false);
+			throw $ex;
+		}
 	}
 
 	/**

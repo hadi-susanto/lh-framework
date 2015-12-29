@@ -55,6 +55,19 @@ class LoaderManager extends ServiceBase {
 	private $defaultAutoLoader = null;
 	/** @var string[] Path(s) for manual loading */
 	private $basePaths = array();
+	/** @var bool Should we suppress auto load error or not. Auto load error should be ignored when we start a session since it can contain un-expected session data */
+	private $suppressAutoLoadError = false;
+	/** @var ClassNotFoundException[] Contains any exceptions when AutoLoader failed to load class while exception being suppressed */
+	private $loadExceptions = array();
+
+	/**
+	 * Get exception(s) occurred when Framework failed to load a class definition
+	 *
+	 * @return \Lh\Exceptions\ClassNotFoundException[]
+	 */
+	public function getLoadExceptions() {
+		return $this->loadExceptions;
+	}
 
 	/**
 	 * Create new instance of LoaderManager
@@ -75,6 +88,15 @@ class LoaderManager extends ServiceBase {
 	 */
 	public function getAutoLoaders() {
 		return array_merge($this->autoLoaders, array("default" => $this->defaultAutoLoader));
+	}
+
+	public function setSuppressAutoLoadError($flag) {
+		if (is_bool($flag) && $flag === true) {
+			$this->suppressAutoLoadError = true;
+		}
+		else {
+			$this->suppressAutoLoadError = false;
+		}
 	}
 
 	/**
@@ -313,8 +335,16 @@ class LoaderManager extends ServiceBase {
 			}
 		}
 
+		// This should NOT throw any error or exception, since in some PHP version throwing exception here will cause current session abandoned.
+		// Reference: http://aaronsaray.com/blog/2008/09/29/php-spl-autoload-3-simple-rules-you-must-follow/
 		// All auto loader failed to load the class ?
-		throw new ClassNotFoundException($className, "All registered auto loaders unable to load '$className'");
+		$notFoundException = new ClassNotFoundException($className, "All registered auto loaders unable to load '$className'");
+		if ($this->suppressAutoLoadError) {
+			$this->loadExceptions[] = $notFoundException;
+		}
+		else {
+			throw $notFoundException;
+		}
 	}
 
 	/**

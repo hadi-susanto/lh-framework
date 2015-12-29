@@ -369,7 +369,8 @@ class Storage implements IArrayAccess, ICountable, IIteratorAggregate {
 	 * @param string     $key
 	 * @param null|mixed $default
 	 *
-	 * @return null|mixed
+	 * @return mixed|null
+	 * @throws ClassNotFoundException
 	 */
 	public function get($key, $default = null) {
 		if (!$this->contains($key)) {
@@ -380,7 +381,14 @@ class Storage implements IArrayAccess, ICountable, IIteratorAggregate {
 		$this->lastAccessedAt = $metaData["accessed"] = time();
 		$this->metaData[$key] = $metaData;
 
-		return $this->values[$key];
+		$buff = $this->values[$key];
+		$incompleteClass = '__PHP_Incomplete_Class';
+		if ($buff instanceof $incompleteClass) {
+			// ToDo: Detect incomplete class name using serialize() to generate string representation then using ReGex to retrieve its class name
+			throw new ClassNotFoundException("__PHP_Incomplete_Class", "Unable to reconstruct '$key' session data, Class definition not loaded yet. Please check your auto loader.");
+		}
+
+		return $buff;
 	}
 
 	/**
@@ -550,6 +558,7 @@ class Storage implements IArrayAccess, ICountable, IIteratorAggregate {
 	 * @param null|mixed $default
 	 *
 	 * @return null|mixed
+	 * @throws ClassNotFoundException
 	 */
 	public function getFlash($key, $default = null) {
 		if (!$this->containsFlash($key)) {
@@ -560,7 +569,15 @@ class Storage implements IArrayAccess, ICountable, IIteratorAggregate {
 		$this->lastAccessedAt = $metaData["accessed"] = time();
 		$this->metaData[$key] = $metaData;
 
-		return $this->flashMessages[$key];
+		$buff = $this->flashMessages[$key];
+		$incompleteClass = '__PHP_Incomplete_Class';
+		if ($buff instanceof $incompleteClass) {
+			// ToDo: Detect incomplete class name using serialize() to generate string representation then using ReGex to retrieve its class name
+
+			throw new ClassNotFoundException("__PHP_Incomplete_Class", "Unable to reconstruct '$key' session data, Class definition not loaded yet. Please check your auto loader.");
+		}
+
+		return $buff;
 	}
 
 	/**
