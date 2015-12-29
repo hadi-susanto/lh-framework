@@ -25,7 +25,7 @@
 		<div style="border: dotted 1px #000000; padding: 0 10px; overflow: auto;">
 			<pre><?php print($message); ?></pre>
 		</div>
-		<?php if (isset($previousMessage)): ?>
+		<?php if (isset($previousMessage) && $previousMessage != null): ?>
 		<br />
 		<span class="bold">Previous Exception Message(s) :</span><br />
 		<div style="border: dotted 1px #000000; padding: 0 10px; overflow: auto;">
