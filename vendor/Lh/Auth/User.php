@@ -261,6 +261,9 @@ class User implements IExchangeable, IAuthorization, ISerializable {
 				$this->addRole($role);
 			}
 		}
+		if (isset($values["permissions"]) && is_array($values["permissions"])) {
+			$this->permissions = $values["permissions"];
+		}
 	}
 
 	/**
@@ -271,6 +274,7 @@ class User implements IExchangeable, IAuthorization, ISerializable {
 	 *  - identity
 	 *  - name
 	 *  - roles
+	 *  - permissions
 	 *
 	 * @return array
 	 */
@@ -279,7 +283,8 @@ class User implements IExchangeable, IAuthorization, ISerializable {
 			"id" => $this->id,
 			"identity" => $this->identity,
 			"name" => $this->name,
-			"roles" => $this->roles
+			"roles" => $this->roles,
+			"permissions" => $this->permissions
 		);
 	}
 
