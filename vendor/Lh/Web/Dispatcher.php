@@ -420,9 +420,14 @@ class Dispatcher {
 			}
 
 			$this->controller->initialize();
+			if ($this->isCompleted()) {
+				// Allow execution to be halt whenever initialization reach completed state
+				return;
+			}
+
+			// Make sure finalize() method called since initialize() called
 			$this->controller->dispatch($this->routeData->getMethodName(), $this->routeData->getParameters());
 			$this->controller->finalize();
-
 			if ($this->isCompleted()) {
 				return;
 			}
