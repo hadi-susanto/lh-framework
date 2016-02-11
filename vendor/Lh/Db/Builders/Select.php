@@ -15,7 +15,7 @@ use Lh\Db\DbException;
 /**
  * Class Select
  *
- * Represet SELECT statement
+ * Represent SELECT statement
  *
  * @package Lh\Db\Builders
  */
@@ -105,6 +105,117 @@ class Select implements ISelect {
 	}
 
 	/**
+	 * Reset all columns definition to empty array.
+	 *
+	 * @return ISelect
+	 */
+	public function resetColumns() {
+		$this->fields = array();
+
+		return $this;
+	}
+
+	/**
+	 * Reset DISTINCT keyword flag
+	 *
+	 * @return ISelect
+	 */
+	public function resetDistinct() {
+		$this->distinct = false;
+
+		return $this;
+	}
+
+	/**
+	 * Reset table name and aliases to null.
+	 *
+	 * @return ISelect
+	 */
+	public function resetFrom() {
+		$this->table = null;
+		$this->alias = null;
+
+		return $this;
+	}
+
+	/**
+	 * Reset JOIN keyword. Compiled SQL will not contains JOIN
+	 *
+	 * @return ISelect
+	 */
+	public function resetJoin() {
+		$this->joins = array();
+
+		return $this;
+	}
+
+	/**
+	 * Reset WHERE keyword. Compiled SQL will not contains WHERE
+	 *
+	 * @return ISelect
+	 */
+	public function resetWhere() {
+		$this->wheres = array();
+
+		return $this;
+	}
+
+	/**
+	 * Reset GROUP BY keyword. Compiled SQL will not contains GROUP BY
+	 *
+	 * @return ISelect
+	 */
+	public function resetGroup() {
+		$this->groups = array();
+
+		return $this;
+	}
+
+	/**
+	 * Reset HAVING keyword. Compiled SQL will not contains HAVING
+	 *
+	 * @return ISelect
+	 */
+	public function resetHaving() {
+		$this->having = array();
+
+		return $this;
+	}
+
+	/**
+	 * Reset ORDER BY keyword. Compiled SQL will not contains ORDER BY
+	 *
+	 * @return ISelect
+	 */
+	public function resetOrder() {
+		$this->orders = array();
+
+		return $this;
+	}
+
+	/**
+	 * Reset LIMIT and OFFSET keyword. Compiled SQL will not contains LIMIT nor OFFSET
+	 *
+	 * @return ISelect
+	 */
+	public function resetLimit() {
+		$this->limit = $this->offset = -1;
+
+		return $this;
+	}
+
+	/**
+	 * Reset OFFSET keyword. Compiled SQL will not contains OFFSET
+	 *
+	 * @return ISelect
+	 */
+	public function resetOffset() {
+		$this->offset = -1;
+
+		return $this;
+	}
+
+	/**
 	 * Set column(s) / field(s) to be retrieved from a table
 	 *
 	 * Columns can be string which comma separated or array string
@@ -127,7 +238,7 @@ class Select implements ISelect {
 		}
 
 		if ($clearExisting) {
-			$this->fields = array();
+			$this->resetColumns();
 		}
 		if (is_array($columns)) {
 			foreach ($columns as $alias => $column) {
@@ -584,7 +695,7 @@ class Select implements ISelect {
 			throw new \InvalidArgumentException("OFFSET should be greater or equals to zero");
 		}
 
-		$this->limit = $limit;
+		$this->limit = (int)$limit;
 		$this->offset = ($offset > 0) ? $offset : -1;
 
 		// Allow chaining

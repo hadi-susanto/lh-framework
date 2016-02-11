@@ -20,6 +20,76 @@ interface ISelect extends ISql {
 	const ORDER_DESC = 'DESC';
 
 	/**
+	 * Reset all columns definition to empty array.
+	 *
+	 * @return ISelect
+	 */
+	public function resetColumns();
+
+	/**
+	 * Reset DISTINCT keyword flag
+	 *
+	 * @return ISelect
+	 */
+	public function resetDistinct();
+
+	/**
+	 * Reset table name and aliases to null.
+	 *
+	 * @return ISelect
+	 */
+	public function resetFrom();
+
+	/**
+	 * Reset JOIN keyword. Compiled SQL will not contains JOIN
+	 *
+	 * @return ISelect
+	 */
+	public function resetJoin();
+
+	/**
+	 * Reset WHERE keyword. Compiled SQL will not contains WHERE
+	 *
+	 * @return ISelect
+	 */
+	public function resetWhere();
+
+	/**
+	 * Reset GROUP BY keyword. Compiled SQL will not contains GROUP BY
+	 *
+	 * @return ISelect
+	 */
+	public function resetGroup();
+
+	/**
+	 * Reset HAVING keyword. Compiled SQL will not contains HAVING
+	 *
+	 * @return ISelect
+	 */
+	public function resetHaving();
+
+	/**
+	 * Reset ORDER BY keyword. Compiled SQL will not contains ORDER BY
+	 *
+	 * @return ISelect
+	 */
+	public function resetOrder();
+
+	/**
+	 * Reset LIMIT and OFFSET keyword. Compiled SQL will not contains LIMIT nor OFFSET
+	 *
+	 * @return ISelect
+	 */
+	public function resetLimit();
+
+	/**
+	 * Reset OFFSET keyword. Compiled SQL will not contains OFFSET
+	 *
+	 * @return ISelect
+	 */
+	public function resetOffset();
+
+	/**
 	 * Count total field(s) in current SELECT
 	 *
 	 * Count total field(s) to be retrieved from current statement. IMPORTANT: '*' wildcard will be counted as one field!
