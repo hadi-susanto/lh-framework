@@ -85,6 +85,42 @@ class User implements IExchangeable, IAuthorization, ISerializable {
 	}
 
 	/**
+	 * Get current user role(s)
+	 *
+	 * @return Role[]
+	 */
+	public function getRoles() {
+		return $this->roles;
+	}
+
+	/**
+	 * Get effective user permission(s).
+	 *
+	 * @param bool $includeRolePermission Should the returned permission include permission from user's role(s)
+	 *
+	 * @return bool[] array key is the permission token
+	 */
+	public function getPermissions($includeRolePermission) {
+		if (!$includeRolePermission) {
+			return $this->permissions;
+		}
+
+		$buffer = $this->permissions;
+		foreach ($this->roles as $role) {
+			foreach ($role->getPermissions() as $key => $value) {
+				if (array_key_exists($key, $buffer)) {
+					$buffer[$key] = $buffer[$key] && $value;
+				}
+				else {
+					$buffer[$key] = $value;
+				}
+			}
+		}
+
+		return $buffer;
+	}
+
+	/**
 	 * Add or replace a role for current user.
 	 *
 	 * All permission from role automatically applied to user. Permission from user object have more priority compared to Role priority.
@@ -199,7 +235,7 @@ class User implements IExchangeable, IAuthorization, ISerializable {
 	 * @return bool
 	 */
 	public function hasPermission($permission) {
-		return isset($this->permissions[$permission]);
+		return array_key_exists($permission, $this->permissions);
 	}
 
 	/**

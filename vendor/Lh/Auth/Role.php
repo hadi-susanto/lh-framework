@@ -73,6 +73,14 @@ class Role implements IAuthorization, IExchangeable, ISerializable {
 		return $this->description;
 	}
 
+	/**
+	 * Get effective role permission(s)
+	 *
+	 * @return \bool[] array key is the permission token
+	 */
+	public function getPermissions() {
+		return $this->permissions;
+	}
 
 	/**
 	 * Add allow permission into current role
@@ -127,7 +135,7 @@ class Role implements IAuthorization, IExchangeable, ISerializable {
 	 * @return bool
 	 */
 	public function hasPermission($permission) {
-		return isset($this->permissions[$permission]);
+		return array_key_exists($permission, $this->permissions);
 	}
 
 	/**
