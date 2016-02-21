@@ -376,7 +376,6 @@ abstract class AdapterBase implements IAdapter {
 		if (!$this->isOpened()) {
 			return false;
 		}
-		$this->lastException = null;
 
 		return $this->_rollbackTransaction();
 	}

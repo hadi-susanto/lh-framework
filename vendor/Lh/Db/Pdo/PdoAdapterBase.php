@@ -473,7 +473,6 @@ abstract class PdoAdapterBase implements IPdoAdapter {
 		if (!$this->isOpened()) {
 			return false;
 		}
-		$this->resetError();
 
 		return $this->nativeConnector->rollBack();
 	}

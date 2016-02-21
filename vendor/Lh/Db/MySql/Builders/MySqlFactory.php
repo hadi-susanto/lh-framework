@@ -34,7 +34,7 @@ class MySqlFactory implements IFactory {
 	/**
 	 * Create object represent SELECT statement
 	 *
-	 * @param string $columns
+	 * @param string|string[]|\Lh\Db\Builders\ILiteral|\Lh\Db\Builders\ILiteral[] $columns
 	 *
 	 * @return MySqlSelect
 	 */

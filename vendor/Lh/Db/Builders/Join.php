@@ -26,7 +26,7 @@ class Join implements ILiteral {
 	private $table;
 	/** @var string Alias for table */
 	private $alias;
-	/** @var string Join condition */
+	/** @var string[] Join conditions */
 	private $conditions;
 
 	/**
@@ -64,6 +64,19 @@ class Join implements ILiteral {
 	}
 
 	/**
+	 * Add a new condition to current JOIN clause
+	 *
+	 * @param string|ILiteral $condition
+	 */
+	public function addCondition($condition) {
+		if (!is_string($condition) && !($condition instanceof ILiteral)) {
+			throw new \InvalidArgumentException("Condition only accept either string or an instance of ILiteral");
+		}
+
+		$this->conditions[] = $condition;
+	}
+
+	/**
 	 * Build string representation of current JOIN clause
 	 *
 	 * This method not intended called by user code. It's should be called by other ISql object to create fully functional SQL string.
@@ -82,8 +95,7 @@ class Join implements ILiteral {
 			$fragments[] = "AS " . $this->platform->quoteIdentifier($this->alias);
 		}
 		if ($this->conditions !== null && count($this->conditions) > 0) {
-			$idx = 0;
-			foreach ($this->conditions as $condition) {
+			foreach ($this->conditions as $idx => $condition) {
 				$prefix = ($idx == 0) ? "ON " : "AND ";
 				if (is_string($condition)) {
 					$fragments[] = $prefix . $this->platform->quoteIdentifierList($condition, array("="));

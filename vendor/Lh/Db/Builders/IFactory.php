@@ -19,7 +19,7 @@ interface IFactory {
 	/**
 	 * Create object represent SELECT statement
 	 *
-	 * @param string $columns
+	 * @param string|string[]|ILiteral|ILiteral[] $columns
 	 *
 	 * @return ISelect
 	 */
