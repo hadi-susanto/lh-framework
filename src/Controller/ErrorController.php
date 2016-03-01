@@ -160,7 +160,7 @@ class ErrorController extends ControllerBase implements IBasicError, IExceptionE
 					} else if (is_object($arg)) {
 						$buff[] = get_class($arg);
 					} else if (is_array($arg)) {
-						$buff[] = "Array";
+						$buff[] = \Lh\Utilities\Collections\ArrayExtension::toString($arg);
 					} else if (is_resource($arg)) {
 						$buff[] = "Resource: '" . get_resource_type($arg) . "''";
 					} else {
@@ -216,8 +216,13 @@ class ErrorController extends ControllerBase implements IBasicError, IExceptionE
 							$buff[] = "'$arg'";
 						} else if (is_object($arg)) {
 							$buff[] = get_class($arg);
+						} else if (is_array($arg)) {
+							$buff[] = \Lh\Utilities\Collections\ArrayExtension::toString($arg);
+						} else if (is_resource($arg)) {
+							$buff[] = "Resource: '" . get_resource_type($arg) . "''";
 						} else {
-							$buff[] = "" . $arg;
+							// For other unknown type let PHP convert to string automatically
+							$buff[] = @("" . $arg);
 						}
 					}
 
