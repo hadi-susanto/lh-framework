@@ -354,7 +354,7 @@ class Dispatcher {
 
 		// Dispatching moved into internal code to make sure executing index is decreased
 		$this->setRouteData($routeData);
-		$this->_dispatch($routeData);
+		$this->_dispatch();
 		Dispatcher::$executingDispatcher = $previousInstance;
 	}
 
@@ -457,7 +457,7 @@ class Dispatcher {
 			if ($view->isRequireView()) {
 				if (!is_file($view->getViewFileName(true))) {
 					// View is required but we don't have appropriate view file
-					$this->dispatchNoView();
+					$this->dispatchNoView($view->getViewFileName());
 
 					return;
 				}
@@ -561,14 +561,17 @@ class Dispatcher {
 	 * This will render server error to client since framework unable to find appropriate view file (template file). This can be happen because user forgot to
 	 * supply default view file or redirect view file to non-exists one
 	 *
+	 * @param string      $viewPath
 	 * @param int         $httpErrorCode
 	 * @param null|string $httpErrorMessage
 	 * @param bool        $useNewResponseObject
 	 */
-	public function dispatchNoView($httpErrorCode = 500, $httpErrorMessage = null, $useNewResponseObject = true) {
+	public function dispatchNoView($viewPath, $httpErrorCode = 500, $httpErrorMessage = null, $useNewResponseObject = true) {
 		$routeData = new RouteData();
 		$routeData->setControllerSegment("error");
 		$routeData->setMethodSegment("no-view");
+
+		$routeData->addNamedParameter("viewPath", $viewPath);
 
 		$this->processError($httpErrorCode, $httpErrorMessage, $useNewResponseObject, $routeData);
 	}
@@ -695,4 +698,4 @@ class Dispatcher {
 	}
 }
 
-// End of File: Dispatcher.php 
+// End of File: Dispatcher.php

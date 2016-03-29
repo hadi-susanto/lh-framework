@@ -101,10 +101,11 @@ class ErrorController extends ControllerBase implements IBasicError, IExceptionE
 	 * @return void
 	 */
 	public function noViewAction() {
+		$viewPath = $this->getRequest()->getNamedParameter("viewPath");
 		if ($this->isDebug) {
-			$this->pageView->addVar("message", "There is no associated VIEW file for current request. Please contact web administrator about this URL.\nCurrent route:" . $this->readableRouteData);
+			$this->pageView->addVar("message", "There is no associated VIEW file '$viewPath'. Please contact web administrator about this URL.\nCurrent route:" . $this->readableRouteData);
 		} else {
-			$this->pageView->addVar("message", "There is no associated VIEW file for current request. Please contact web administrator about this URL.");
+			$this->pageView->addVar("message", "There is no associated VIEW file '$viewPath'. Please contact web administrator about this URL.");
 		}
 		$this->pageView->addVar("type", "View File Not Found");
 	}
